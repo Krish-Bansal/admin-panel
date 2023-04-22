@@ -3,7 +3,7 @@ import { AiOutlineEye } from 'react-icons/ai';
 import { BsEyeSlash } from 'react-icons/bs'
 
 const CustomInput = (props) => {
-  const { type, label, id, className } = props;
+  const { type, label, i_id, i_class, name, val, onChng, onBlr } = props;
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -11,14 +11,18 @@ const CustomInput = (props) => {
   };
 
   return (
-    <div className="form-floating mb-3 position-relative">
+    <div className="form-floating mt-3 position-relative">
       <input
         type={showPassword ? 'text' : type}
-        className={`form-control ${className}`}
-        id={id}
+        className={`form-control ${i_class}`}
+        id={i_id}
         placeholder={label}
+        name={name}
+        value={val}
+        onChange={onChng}
+        onBlur={onBlr}
       />
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={i_id}>{label}</label>
       {type === 'password' && (
         <button
           type="button"

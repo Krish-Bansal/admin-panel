@@ -84,3 +84,8 @@ main::-webkit-scrollbar {
 .ant-menu {
   padding-top: 8px;
 }
+
+.error {
+  color: red;
+  font-size: 12px
+}

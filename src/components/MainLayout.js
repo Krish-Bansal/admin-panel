@@ -7,14 +7,18 @@ import { Link } from 'react-router-dom';
 import { RxDashboard } from "react-icons/rx"
 import { IoIosPeople } from 'react-icons/io'
 import { Outlet } from 'react-router-dom';
+import { RiCoupon3Line } from "react-icons/ri";
+import { MdOutlineCampaign } from 'react-icons/md'
 import { AiOutlineShoppingCart, AiOutlineOrderedList, AiOutlineBgColors, AiOUtline } from 'react-icons/ai'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { GoListUnordered } from 'react-icons/go'
 import { HiClipboardList } from 'react-icons/hi'
 import { Layout, Menu, theme } from 'antd';
 import { GiClothes } from 'react-icons/gi'
 import React, { useState } from 'react';
 import { IoIosNotifications } from 'react-icons/io';
-import { BsPatchQuestion } from 'react-icons/bs'
+import { BsPatchQuestion, BsCardList } from 'react-icons/bs'
 import { BiCategoryAlt, BiColor } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 const { Header, Sider, Content } = Layout;
@@ -25,7 +29,7 @@ const MainLayout = () => {
   } = theme.useToken();
   const navigate = useNavigate();
   return (
-    <Layout>
+    <Layout /*onContextMenu={(e) => e.preventDefault()}*/>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" style={{ background: "#001529" }}>
           <h2 className='text-white fs-5 text-center py-3 mb-0'>
@@ -103,6 +107,24 @@ const MainLayout = () => {
               label: ' Orders',
             },
             {
+              key: 'marketing',
+              icon: <MdOutlineCampaign className='fs-4' />,
+              label: 'Marketing',
+              children: [
+                {
+                  key: 'coupon',
+                  icon: <RiCoupon3Line className='fs-4' />,
+                  label: 'Add Coupon',
+
+                },
+                {
+                  key: "coupon-list",
+                  icon: <BsCardList className='fs-4' />,
+                  label: 'Coupon List',
+                },
+              ]
+            },
+            {
               key: "enquiries",
               icon: <BsPatchQuestion className="fs-4" />,
               label: "Enquiries"
@@ -152,6 +174,7 @@ const MainLayout = () => {
             background: colorBgContainer,
           }}
         >
+          <ToastContainer position='top-right' autoClose={250} hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable theme='light' />
           <Outlet />
         </Content>
       </Layout>

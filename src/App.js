@@ -15,6 +15,10 @@ import Productlist from './pages/Productlist';
 import Addcolor from './pages/Addcolor';
 import AddCategory from './pages/AddCategory';
 import Addproduct from './pages/Addproduct';
+import Couponlist from './pages/Couponlist';
+import AddCoupon from './pages/AddCoupon';
+import ViewEnq from './pages/ViewEnq';
+import ViewOrder from './pages/ViewOrder';
 const App = () => {
   return (
 
@@ -25,13 +29,27 @@ const App = () => {
       <Route path='/admin' element={<MainLayout />}>
         <Route index element={<Dashboard />} />
         <Route path='enquiries' element={<Enquiries />} />
+        <Route path='enquiries/:id' element={<ViewEnq />} />
+
         <Route path='orders' element={<Orders />} />
+        <Route path='order/:id' element={<ViewOrder />} />
+
         <Route path='customers' element={<Customers />} />
         <Route path='list-color' element={<Colorlist />} />
+        <Route path='coupon-list' element={<Couponlist />} />
+        <Route path='coupon' element={<AddCoupon />} />
+        <Route path='coupon/:id' element={<AddCoupon />} />
+
+
+
         <Route path='list-category' element={<Categorylist />} />
         <Route path='product-list' element={<Productlist />} />
         <Route path='color' element={<Addcolor />} />
+        <Route path='color/:id' element={<Addcolor />} />
+
         <Route path='category' element={<AddCategory />} />
+        <Route path='category/:id' element={<AddCategory />} />
+
         <Route path='product' element={<Addproduct />} />
 
 
@@ -45,8 +63,6 @@ const App = () => {
 
 
       </Route>
-
-
     </Routes>
 
   );
