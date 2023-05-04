@@ -37,9 +37,9 @@ const AddCoupon = () => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: dataCoupon.name || "",
-      expiry: dataCoupon.expiry || "",
-      discount: dataCoupon.discount || "",
+      name: dataCoupon?.name || "",
+      expiry: dataCoupon?.expiry || "",
+      discount: dataCoupon?.discount || "",
     },
     validationSchema: schema,
     onSubmit: (values) => {

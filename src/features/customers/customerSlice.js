@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import customerService from "./customerService";
 
 export const getUsers = createAsyncThunk('customer/get-customers', async (thunkAPI) => {
@@ -9,6 +9,15 @@ export const getUsers = createAsyncThunk('customer/get-customers', async (thunkA
     return thunkAPI.rejectWithValue(error)
   }
 })
+export const deleteUser = createAsyncThunk('customer/delete-customer', async (id, thunkAPI) => {
+  try {
+    return await customerService.deleteAUser(id)
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+
+  }
+})
+export const resetState = createAction("Reset_all")
 
 const initialState = {
   customers: [],
@@ -38,6 +47,23 @@ export const customerSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
       })
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.deletedUser = action.payload;
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(resetState, () => initialState)
+
   },
 })
 

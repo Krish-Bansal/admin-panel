@@ -33,3 +33,40 @@
   font-size: 14px;
   font-family: Roboto !important;
 }
+
+
+.colors {
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.colors li {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 0.5px solid white
+}
+
+.colors .bg-black {
+  --bs-bg-opacity: 0.15;
+  border: 0.5px solid black
+}
+
+
+
+/* admin image  */
+
+.admin-image {
+  background-color: rgb(72, 102, 11);
+  font-size: 19px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+/* admin image  */

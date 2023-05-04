@@ -19,10 +19,12 @@ import { GiClothes } from 'react-icons/gi'
 import React, { useState } from 'react';
 import { IoIosNotifications } from 'react-icons/io';
 import { BsPatchQuestion, BsCardList } from 'react-icons/bs'
-import { BiCategoryAlt, BiColor } from 'react-icons/bi';
+import { BiCategoryAlt, BiColor, BiLogOut } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
+  const userState = useSelector(state => state?.auth?.user)
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -46,7 +48,8 @@ const MainLayout = () => {
           defaultSelectedKeys={['']}
           onClick={({ key }) => {
             if (key === "signout") {
-
+              localStorage.clear()
+              window.location.reload()
             } else {
               navigate(key);
             }
@@ -128,6 +131,11 @@ const MainLayout = () => {
               key: "enquiries",
               icon: <BsPatchQuestion className="fs-4" />,
               label: "Enquiries"
+            },
+            {
+              key: "signout",
+              icon: <BiLogOut className="fs-4" />,
+              label: "Signout"
             }
           ]}
         />
@@ -144,17 +152,18 @@ const MainLayout = () => {
             onClick: () => setCollapsed(!collapsed),
           })}
           <div className='d-flex gap-4 align-items-center'>
-            <div className='position-relative'>
+            {/* <div className='position-relative'>
               <IoIosNotifications className='fs-4' />
               <span className='badge bg-warning rounded-circle p-1 position-absolute'>3</span>
-            </div>
+            </div> */}
             <div className='d-flex gap-3 align-items-center dropdown' >
               <div>
-                <img width={32} height={32} src='https://yt3.ggpht.com/yti/AHXOFjUFLasw0ow4A1OuSdqDn2Cpy0NYvZyx1y1CkPNIyw=s88-c-k-c0x00ffffff-no-rj-mo' alt="" />
+                <div className='admin-image'>{userState?.firstname?.charAt(0).toUpperCase()}</div>
+                {/* <img width={32} height={32} src='https://yt3.ggpht.com/yti/AHXOFjUFLasw0ow4A1OuSdqDn2Cpy0NYvZyx1y1CkPNIyw=s88-c-k-c0x00ffffff-no-rj-mo' alt="" /> */}
               </div>
               <div role="button" id='dropdownMenuLink' data-bs-toggle="dropdown" aria-expanded="false">
-                <h5 className='mb-0'>Susan</h5>
-                <p className='mb-0'>susanadhikari@gmail.com</p>
+                <h5 className='mb-0'>{userState?.firstname + " " + userState?.lastname}</h5>
+                <p className='mb-0'>{userState?.email}</p>
               </div>
               <div className='dropdown-menu' aria-labelledby='dropdownMenuLink'>
                 <li><Link to="/" className='dropdown-item py-1 mb-1' style={{ "height": "auto", "lineHeight": "20px" }}>

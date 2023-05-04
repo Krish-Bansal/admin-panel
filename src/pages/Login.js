@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, } from 'react-bootstrap';
 import CustomInput from '../components/CustomInput';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo1 from "../assests/defy_logo-removebg-preview.png";
@@ -37,7 +37,6 @@ const Login = () => {
     const intervalId = setInterval(() => {
       setCurrentImageIndex(prevIndex => (prevIndex + 1) % imageCount);
     }, 5500);
-    console.log(intervalId)
     return () => clearInterval(intervalId)
   }, [])
   const dispatch = useDispatch();
@@ -99,10 +98,10 @@ const Login = () => {
                 </div>
                 <button className='border-0 rounded-3 px-3 py-1 text-white font-light w-35 fs-5 text-decoration-none my-3' type="submit" style={{ backgroundColor: "#FBA71A" }} >Login</button>
 
-                <div className='mb-3 text-start'>
+                {/* <div className='mb-3 text-start'>
                   <Link to="forgot-password" className='text-[#2F4F5E]' style={{ textDecoration: "none" }}>FORGOT LOGIN PASSWORD?
                   </Link>
-                </div>
+                </div> */}
               </form>
             </div>
 

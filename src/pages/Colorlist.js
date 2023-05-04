@@ -15,7 +15,7 @@ const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
-    sorter: (a, b) => a.name.length - b.name.length
+
   },
   {
     title: 'Action',
@@ -47,7 +47,12 @@ const Colorlist = () => {
   for (let i = 0; i < colorState.length; i++) {
     data1.push({
       key: i + 1,
-      name: colorState[i].title,
+      name: <p>
+        <ul className="colors ps-0">
+          <div className='bg-black p-1 '><li style={{ backgroundColor: colorState[i]?.title, borderColor: 'white' }}></li></div>
+
+        </ul>
+      </p>,
       action: (
         <>
           <Link to={`/admin/color/${colorState[i]._id}`} className='fs-5 text-danger' style={{ "textDecoration": "none" }}>

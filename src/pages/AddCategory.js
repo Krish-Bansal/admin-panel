@@ -14,6 +14,7 @@ const AddCat = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const getPCatId = location.pathname.split("/")[3];
+  console.log(getPCatId)
   const navigate = useNavigate();
   const newCategory = useSelector((state) => state.pCategory);
   const { isSuccess, isError, isLoading, createdCategory, categoryName, updatedCategory } = newCategory;

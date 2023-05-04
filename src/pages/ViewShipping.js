@@ -12,7 +12,7 @@ const columns = [
     dataIndex: 'key',
   },
   {
-    title: 'Product Name',
+    title: 'Name',
     dataIndex: 'name',
   },
   {
@@ -30,7 +30,7 @@ const columns = [
   },
 ];
 
-const ViewOrder = () => {
+const ViewShipping = () => {
   const location = useLocation();
   const orderId = location.pathname.split("/")[3];
   const dispatch = useDispatch();
@@ -39,13 +39,13 @@ const ViewOrder = () => {
     dispatch(getOrder(orderId))
   }, [])
 
-  const orderState = useSelector((state) => state?.auth?.singleorder?.orders)
+  const shippingState = useSelector((state) => state?.auth?.singleorder?.orders)
   const data1 = [];
 
   for (let i = 0; i < orderState?.orderItems?.length; i++) {
     data1.push({
       key: i + 1,
-      name: orderState?.orderItems[i]?.product?.title,
+      name: orderState?.product?.title,
       count: orderState?.orderItems[i]?.quantity,
       color: orderState?.orderItems[i]?.color?.title,
       amount: orderState?.orderItems[i]?.price,
@@ -54,7 +54,7 @@ const ViewOrder = () => {
 
   return (
     <div>
-      <h3 className='mb-4 title'>View Order</h3>
+      <h3 className='mb-4 title'>View Shipping Info</h3>
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
@@ -62,4 +62,4 @@ const ViewOrder = () => {
   )
 }
 
-export default ViewOrder;
+export default ViewShipping;

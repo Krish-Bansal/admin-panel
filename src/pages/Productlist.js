@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table } from 'antd'
 import { BiEdit } from 'react-icons/bi'
 import { AiFillDelete } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from '../features/product/productSlice';
+import { deleteAproduct, getProducts, resetState } from '../features/product/productSlice';
 import { Link } from 'react-router-dom';
+import CustomModal from '../components/CustomModal';
 
 const columns = [
   {
@@ -45,7 +46,19 @@ const columns = [
 
 const Productlist = () => {
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [productId, setproductId] = useState("");
+
+  const showModal = (e) => {
+    setOpen(true);
+    setproductId(e);
+  };
+
+  const hideModal = () => {
+    setOpen(false);
+  }
   useEffect(() => {
+    dispatch(resetState());
     dispatch(getProducts());
   }, []);
   const productState = useSelector((state) => state.product.products)
@@ -55,19 +68,34 @@ const Productlist = () => {
       key: i + 1,
       title: productState[i].title,
       category: productState[i].category,
-      color: productState[i].color,
+      color: <div className='flex'>
+        <ul className="colors ps-0 mb-0">
+          <div className='bg-black flex '>
+            <li style={{ backgroundColor: productState[i]?.color[0]?.title, borderColor: 'white' }}>
+            </li>
+          </div>
+
+        </ul>
+      </div>,
       price: `${productState[i].price}`,
       action: (
         <>
-          <Link to="/" className='fs-5 text-danger' style={{ "textDecoration": "none" }}>
+          <Link to={`/admin/product/${productState[i]._id}`} className='fs-5 text-danger' style={{ "textDecoration": "none" }}>
             <BiEdit />
           </Link>
-          <Link to="/" className='ms-3 fs-5 text-danger'>
+          <button to="/" className='ms-3 fs-5 text-danger bg-transparent border-0' onClick={() => showModal(productState[i]._id)}>
             <AiFillDelete />
-          </Link>
+          </button>
         </>
       ),
     });
+  }
+  const deletedProduct = (e) => {
+    dispatch(deleteAproduct(e));
+    setOpen(false);
+    setTimeout(() => {
+      dispatch(getProducts())
+    }, 500)
   }
   return (
     <div>
@@ -75,6 +103,12 @@ const Productlist = () => {
       <div>
 
         <Table columns={columns} dataSource={data1} />
+        <CustomModal hideModal={hideModal}
+          open={open}
+          performAction={() => {
+            deletedProduct(productId);
+          }}
+          title="Are you sure you want to delete this Product?" />
       </div>
     </div>
   )
