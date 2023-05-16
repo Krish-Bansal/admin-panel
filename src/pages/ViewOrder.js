@@ -25,9 +25,14 @@ const columns = [
     render: (color) => <div style={{ backgroundColor: color, width: 20, height: 20 }}></div>
   },
   {
+    title: "Size",
+    dataIndex: "size"
+  },
+  {
     title: 'Amount',
     dataIndex: 'amount',
   },
+
 ];
 
 const ViewOrder = () => {
@@ -49,6 +54,7 @@ const ViewOrder = () => {
       count: orderState?.orderItems[i]?.quantity,
       color: orderState?.orderItems[i]?.color?.title,
       amount: orderState?.orderItems[i]?.price,
+      size: orderState?.orderItems[i]?.size
     });
   }
 

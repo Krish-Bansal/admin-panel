@@ -17,7 +17,6 @@ let schema = yup.object().shape({
   title: yup.string().required("Title is Required"),
   description: yup.string().required("Description is Required"),
   price: yup.number().required("Price is Required"),
-
   category: yup.string().required("Category is Required"),
   tags: yup.string().required("Tag is Required"),
   color: yup
@@ -25,16 +24,17 @@ let schema = yup.object().shape({
     .min(1, "Pick at least one color").max(1, "You can only select one color")
     .required("Color is Required"),
   quantity: yup.number().required("Quantity is Required"),
+  size: yup.array().min(1, "Pick at least one size").required("Size is required")
 });
 
 const Addproduct = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const getProductId = location.pathname.split("/")[3];
-  console.log(getProductId)
   const navigate = useNavigate();
   const [color, setColor] = useState([]);
   const [images, setImages] = useState([]);
+  // const [selectedSizes, setSelectedSizes] = useState([]);
   useEffect(() => {
     dispatch(getCategories());
     dispatch(getColors());
@@ -45,29 +45,26 @@ const Addproduct = () => {
   const imgState = useSelector((state) => state.upload.images);
   const newProduct = useSelector((state) => state.product);
   const { isSuccess, isError, isLoading, createdProduct, singleproduct, updatedProduct } = newProduct;
-  useEffect(() => {
-    if (getProductId !== undefined) {
-      dispatch(getAProduct(getProductId))
-    }
-    else {
-      dispatch(resetState())
-    }
-  }, [getProductId])
+  // useEffect(() => {
+
+  //   }
+  //   else {
+  //     // dispatch(resetState())
+  //   }
+  // }, [getProductId])
   useEffect(() => {
     if (isSuccess && createdProduct) {
       toast.success("Product Added Successfully!")
     }
-    if (isSuccess && updatedProduct) {
-      toast.success("Category Updated Successfully!");
-      navigate('/admin/list-product')
-    }
+    // if (isSuccess && updatedProduct) {
+    //   toast.success("Category Updated Successfully!");
+    //   navigate('/admin/list-product')
+    // }
     if (isError) {
       toast.error("Something Went Wrong!")
     }
   }, [isSuccess, isError, isLoading]);
   const deleteImage = (id) => {
-    console.log('Before dispatching delete image');
-    console.log(imgState);
     dispatch(delImg(id));
   }
   const coloropt = [];
@@ -75,7 +72,6 @@ const Addproduct = () => {
     coloropt.push({
       label: <ul className="colors ps-0">
         <div className='bg-black '><li style={{ backgroundColor: i.title, borderColor: 'white' }}></li></div>
-
       </ul>,
       value: i._id,
     });
@@ -103,30 +99,28 @@ const Addproduct = () => {
       color: "",
       quantity: "",
       images: "",
+      size: [],
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      if (getProductId !== undefined) {
-        const data = { id: getProductId, productData: values };
-        console.log(data)
-        dispatch(updateAProduct(data));
-        dispatch(resetState())
-      } else {
-        dispatch(createProducts(values));
-        formik.resetForm()
-        setColor(null);
-        setTimeout(() => { dispatch(resetState()) }, 3000)
-      }
-
+      // alert(JSON.stringify(values))
+      dispatch(createProducts(values));
+      console.log(values)
+      formik.resetForm()
+      setColor(null);
+      setTimeout(() => { dispatch(resetState()) }, 3000)
     },
   });
   const handleColors = (e) => {
     setColor(e);
     console.log(color);
   };
+  const handleSizes = (selectedSizes) => {
+    formik.setFieldValue("size", selectedSizes)
+  };
   return (
     <div>
-      <h3 className="mb-4 title">{getProductId !== undefined ? "Edit" : "Add"}Add Product</h3>
+      <h3 className="mb-4 title">{getProductId !== undefined ? "Edit" : "Add"} Product</h3>
       <div>
         <form
           onSubmit={formik.handleSubmit}
@@ -187,6 +181,54 @@ const Addproduct = () => {
           <div className="error">
             {formik.touched.category && formik.errors.category}
           </div>
+          {formik.values.category === "Shirt" && (
+            <>
+              <Select
+                mode="multiple"
+                allowClear
+                className="w-100"
+                placeholder="Select sizes"
+                value={formik.values.size}
+                onChange={handleSizes}
+                options={[
+                  { label: 'S', value: 'S' },
+                  { label: 'M', value: 'M' },
+                  { label: 'L', value: 'L' },
+                  { label: 'XL', value: 'XL' },
+                  { label: 'XXL', value: 'XXL' },
+                  { label: "XXXL", value: "XXXL" }
+                ]}
+              />
+              <div className="error">
+                {formik.touched.size && formik.errors.size}
+              </div>
+            </>
+          )}
+
+          {formik.values.category === "Pant" && (
+            <>
+              <Select
+                mode="multiple"
+                allowClear
+                className="w-100"
+                placeholder="Select sizes"
+                value={formik.values.size}
+                onChange={handleSizes}
+                options={[
+                  { label: '29', value: '29' },
+                  { label: '30', value: '30' },
+                  { label: '32', value: '32' },
+                  { label: '34', value: '34' },
+                  { label: '36', value: '36' },
+                  { label: '38', value: '38' },
+
+                ]}
+              />
+              <div className="error">
+                {formik.touched.size && formik.errors.size}
+              </div>
+            </>
+          )}
           <select
             name="tags"
             onChange={formik.handleChange("tags")}
@@ -218,6 +260,28 @@ const Addproduct = () => {
           <div className="error">
             {formik.touched.color && formik.errors.color}
           </div>
+          {/* <Select
+            mode="multiple"
+            allowClear
+            className="w-100"
+            placeholder="Select sizes"
+            value={formik.values.size}
+            onChange={handleSizes}
+            options={[
+              { label: 'S', value: 'S' },
+              { label: 'M', value: 'M' },
+              { label: 'L', value: 'L' },
+              { label: 'XL', value: 'XL' },
+              { label: 'XXL', value: 'XXL' },
+              { label: '30', value: '30' },
+              { label: '32', value: '32' },
+              { label: '34', value: '34' },
+              { label: '36', value: '36' },
+            ]}
+          />
+          <div className="error">
+            {formik.touched.size && formik.errors.size}
+          </div> */}
           <CustomInput
             type="number"
             label="Enter Product Quantity"
@@ -245,6 +309,9 @@ const Addproduct = () => {
               )}
             </Dropzone>
           </div>
+          <div>
+            <p>Note:The First uploaded image will be the main image of product card and singleproduct,second image will be the hover image of product card and the rest of the images will be the images of single product.Maximum 10 images of a single product is allowed.</p>
+          </div>
           <div className="showimages d-flex flex-wrap gap-3">
             {imgState?.map((i, j) => {
               return (
@@ -252,7 +319,6 @@ const Addproduct = () => {
                   <button
                     type="button"
                     onClick={() => deleteImage(i.public_id)}
-
                     className="btn-close position-absolute"
                     style={{ top: "10px", right: "10px" }}
                   ></button>

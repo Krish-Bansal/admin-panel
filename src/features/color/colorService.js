@@ -23,6 +23,7 @@ const updateColor = async (color) => {
     { title: color.colorData.title },
     config
   );
+  console.log(color)
   return response.data;
 };
 

@@ -3,10 +3,7 @@ import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrders, updateAOrder } from '../features/auth/authSlice';
 import { Link } from 'react-router-dom';
-import { AiFillDelete } from 'react-icons/ai';
-import { BiEdit } from 'react-icons/bi';
 const columns = [
-
   {
     title: 'SNo',
     dataIndex: 'key',
@@ -27,7 +24,7 @@ const columns = [
     dataIndex: 'product',
   },
   {
-    title: 'Amount',
+    title: 'Bill Amount',
     dataIndex: 'amount',
   },
   {
@@ -42,6 +39,7 @@ const columns = [
         <p>{text}</p>
         <p>{record.address}</p>
         <p>{record.other}</p>
+        <p>{record.mobile}</p>
       </div>
     )
   },
@@ -49,13 +47,22 @@ const columns = [
     title: 'Action',
     dataIndex: 'action',
   },
-
-
 ];
 const Orders = () => {
+  const getTokenFromLocalStorage = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
+
+  const config3 = {
+    headers: {
+      Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+        }`,
+      Accept: "application/json",
+    },
+  };
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getOrders())
+    dispatch(getOrders(config3))
   }, [])
   const orderState = useSelector((state) => state?.auth?.orders?.orders)
 
@@ -76,24 +83,27 @@ const Orders = () => {
       address:
         `${orderState[i]?.shippingInfo?.address}` + `,` + `${orderState[i]?.shippingInfo?.city}` + `,` + `${orderState[i]?.shippingInfo?.state}`,
       other:
-
         `${orderState[i]?.shippingInfo?.other}` + `,` + `${orderState[i]?.shippingInfo?.pincode}`,
-
+      mobile:
+        `${orderState[i]?.shippingInfo?.mobile}`,
       action: (
         <>
           <select name='' defaultValue={orderState[i]?.orderStatus} onChange={(e) => updateOrderStatus(orderState[i]?._id, e.target.value,)} className='form-control form-select' id="">
             <option value="Ordered" disabled selected> Ordered</option>
-            <option value="Processed">Processed</option>
-            <option value="Shipped">Shipped</option>
+            <option value="Processing">Processing</option>
+            {/* <option value="Shipped">Shipped</option> */}
             <option value="Out For Delivery">Out For Delivery</option>
             <option value="Delivered">Delivered</option>
+            <option value="Rejected">Rejected</option>
           </select>
         </>
       ),
     });
   }
   const updateOrderStatus = (a, b) => {
+
     dispatch(updateAOrder({ id: a, status: b }))
+
   }
 
   return (

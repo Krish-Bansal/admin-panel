@@ -4,8 +4,8 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom"
-import { createCoupon, getACoupon, resetState } from "../features/coupon/couponSlice";
+import { useLocation, useNavigate } from "react-router-dom"
+import { createCoupon, getACoupon, resetState, updateACoupon } from "../features/coupon/couponSlice";
 let schema = yup.object().shape({
   name: yup.string().required("Coupon is Required"),
   expiry: yup.date().required("Expiry Date is Required"),
@@ -15,20 +15,25 @@ let schema = yup.object().shape({
 const AddCoupon = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const getCouponId = location.pathname.split('/')[3]
   const newCoupon = useSelector((state) => state.coupon);
-  const { isSuccess, isError, isLoading, createdCoupon, dataCoupon } = newCoupon;
+  const { isSuccess, isError, isLoading, createdCoupon, dataCoupon, updatedCoupon } = newCoupon;
   useEffect(() => {
     if (getCouponId !== undefined) {
       dispatch(getACoupon(getCouponId))
     } else {
       dispatch(resetState)
     }
-
   }, [getCouponId])
   useEffect(() => {
     if (isSuccess && createdCoupon) {
       toast.success("Coupon Added Successfully!")
+    }
+    if (isSuccess && updatedCoupon) {
+      toast.success("Coupon Updated Successfully!")
+      navigate("/admin/coupon-list")
+      dispatch(resetState())
     }
     if (isError) {
       toast.error("Something Went Wrong!")
@@ -43,9 +48,16 @@ const AddCoupon = () => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      dispatch(createCoupon(values));
-      formik.resetForm()
-      setTimeout(() => { dispatch(resetState()) }, 3000)
+      if (getCouponId !== undefined) {
+        const data = { id: getCouponId, couponData: values }
+        dispatch(updateACoupon(data));
+        dispatch(resetState())
+      }
+      else {
+        dispatch(createCoupon(values));
+        formik.resetForm()
+        setTimeout(() => { dispatch(resetState()) }, 3000)
+      }
     },
   });
   return (

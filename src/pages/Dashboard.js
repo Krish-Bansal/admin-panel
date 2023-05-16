@@ -27,6 +27,10 @@ const columns = [
     dataIndex: 'dprice',
   },
   {
+    title: 'Order Id',
+    dataIndex: 'orderid',
+  },
+  {
     title: 'Status',
     dataIndex: 'status',
   },
@@ -34,6 +38,17 @@ const columns = [
 
 
 const Dashboard = () => {
+  const getTokenFromLocalStorage = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
+
+  const config3 = {
+    headers: {
+      Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+        }`,
+      Accept: "application/json",
+    },
+  };
   const dispatch = useDispatch()
   const monthlyDataState = useSelector(state => state?.auth?.monthlyData)
   const yearlyDataState = useSelector(state => state?.auth?.yearlyData)
@@ -43,9 +58,9 @@ const Dashboard = () => {
   console.log(orderState)
   const [dataMonthlySales, setDataMonthlySales] = useState([])
   useEffect(() => {
-    dispatch(getMonthlyData())
-    dispatch(getYearlyData())
-    dispatch(getOrders())
+    dispatch(getOrders(config3))
+    dispatch(getMonthlyData(config3))
+    dispatch(getYearlyData(config3))
   }, [])
   useEffect(() => {
     let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -69,6 +84,7 @@ const Dashboard = () => {
         price: orderState[i]?.totalPrice,
         dprice: orderState[i]?.totalPriceAfterDiscount,
         status: orderState[i]?.orderStatus,
+        orderid: orderState[i]?._id
       });
     }
     setOrderData(data1)
@@ -156,12 +172,12 @@ const Dashboard = () => {
         </div>
         <div className='d-flex justify-content-between align-items-end flex-grow-1  bg-white p-3 rounded-3'>
           <div>
-            <p className='desc'>Total Sales</p>
+            <p className='desc'>Total Orders</p>
             <h4 className='mb-0 sub-title '>{yearlyDataState && yearlyDataState[0]?.count}</h4>
 
           </div>
           <div className='d-flex flex-column align-items-end'>
-            <p className='mb-0 desc'>Sales in Last Year from Today</p>
+            <p className='mb-0 desc'>Orders in Last Year from Today</p>
 
           </div>
         </div>
@@ -174,7 +190,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className='mt-4 flex-grow-1 w-50'>
-          <h3 className='mb-5 title'>Sales Statistics</h3>
+          <h3 className='mb-5 title'>Order Statistics</h3>
           <div>
             <Column {...config2} />
           </div>

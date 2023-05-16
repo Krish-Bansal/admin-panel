@@ -25,6 +25,10 @@ const columns = [
     sorter: (a, b) => a.discount.length - b.discount.length
   },
   {
+    title: 'Coupon Used',
+    dataIndex: 'count',
+  },
+  {
     title: 'Expiry Date',
     dataIndex: 'expiry',
     sorter: (a, b) => a.expiry.length - b.expiry.length
@@ -60,10 +64,11 @@ const Couponlist = () => {
       key: i + 1,
       name: couponState[i].name,
       discount: couponState[i].discount,
+      count: couponState[i].count,
       expiry: new Date(couponState[i].expiry).toLocaleString(),
       action: (
         <>
-          <Link to={`/admin/coupon/ ${couponState[i]._id}`} className='fs-5 text-danger' style={{ "textDecoration": "none" }}>
+          <Link to={`/admin/coupon/${couponState[i]._id}`} className='fs-5 text-danger' style={{ "textDecoration": "none" }}>
             <BiEdit />
           </Link>
           <button className='ms-3 fs-5 text-danger bg-transparent border-0' onClick={() => showModal(couponState[i]._id)}>
@@ -80,7 +85,6 @@ const Couponlist = () => {
       dispatch(getCoupons())
     }, 500)
   }
-
   return (
 
     <div>
