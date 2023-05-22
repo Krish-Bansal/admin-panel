@@ -59,7 +59,6 @@ const Addproduct = () => {
   const imgState = useSelector((state) => state.upload.images);
   const newProduct = useSelector((state) => state.product);
   const { isSuccess, isError, isLoading, createdProduct, productTitle, productDescription, productPrice, productCategory, productSize, productTags, productColorTitle, productQuantity, productImage, updatedProduct } = newProduct;
-
   useEffect(() => {
     if (getProductId !== undefined) {
       dispatch(getAProduct(getProductId));
@@ -72,7 +71,7 @@ const Addproduct = () => {
       toast.success("Product Added Successfully!")
     }
     if (isSuccess && updatedProduct) {
-      toast.success("Category Updated Successfully!");
+      toast.success("Product Updated Successfully!");
       navigate('/admin/product-list')
     }
     if (isError) {
@@ -124,8 +123,7 @@ const Addproduct = () => {
     validationSchema: schema,
     onSubmit: (values) => {
       if (getProductId !== undefined) {
-
-        const data = { id: getProductId, productData: values }
+        const data = { id: getProductId, productData: values, config: config3 }
         dispatch(updateAProduct(data))
         dispatch(resetState())
       }
@@ -142,16 +140,8 @@ const Addproduct = () => {
       handleColors(productColorTitle); // Ensure the value is always an array
     }
   }, [productColorTitle])
-  useEffect(() => {
-    if (productImage) {
-      const imageUrls = productImage.map((image) => ({
-        url: image.url,
-        public_id: image.public_id,
-      }));
-      setImgState(imageUrls);
-    }
-    // ... other field assignments
-  }, [productImage]);
+
+
 
   const handleColors = (selectedColors) => {
     formik.setFieldValue('color', Array.isArray(selectedColors) ? selectedColors : [selectedColors]);
@@ -331,7 +321,20 @@ const Addproduct = () => {
             </p>
           </div>
           <div className="showimages d-flex flex-wrap gap-3">
-            {imgState && imgState.map((image, index) => (
+            {/* Display URLs from imgState */}
+            {imgState?.map((image, index) => (
+              <div className="position-relative" key={index}>
+                <button
+                  type="button"
+                  onClick={() => deleteImage(image.public_id)}
+                  className="btn-close position-absolute"
+                  style={{ top: "10px", right: "10px" }}
+                ></button>
+                <img src={image.url} alt="" width={200} height={200} />
+              </div>
+            ))}
+            {/* Display URLs from productImage */}
+            {productImage?.map((image, index) => (
               <div className="position-relative" key={index}>
                 <button
                   type="button"
@@ -343,6 +346,7 @@ const Addproduct = () => {
               </div>
             ))}
           </div>
+
           {formik.touched.images && formik.errors.images && (
             <div className="error">{formik.errors.images}</div>
           )}

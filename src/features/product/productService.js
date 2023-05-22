@@ -21,8 +21,8 @@ const deleteProduct = async (id) => {
 }
 const updateProduct = async (product) => {
   const response = await axios.put(`${base_url}product/${product.id}`,
-    { title: product.productData.title },
-    config
+    { title: product.productData.title, description: product.productData.description, price: product.productData.price, category: product.productData.category, tags: product.productData.tags, color: product.productData.color, size: product.productData.size, quantity: product.productData.quantity },
+    product.config
   );
   return response.data;
 };

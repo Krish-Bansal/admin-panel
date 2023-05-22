@@ -55,7 +55,6 @@ const Dashboard = () => {
   const orderState = useSelector(state => state?.auth?.orders?.orders)
   const [dataMonthly, setDataMonthly] = useState([])
   const [orderData, setOrderData] = useState([])
-  console.log(orderState)
   const [dataMonthlySales, setDataMonthlySales] = useState([])
   useEffect(() => {
     dispatch(getOrders(config3))
