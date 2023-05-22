@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import CouponService from "./couponService";
 
-export const getCoupons = createAsyncThunk('coupon/get-coupons', async (thunkAPI) => {
+export const getCoupons = createAsyncThunk('coupon/get-coupons', async (couponData, thunkAPI) => {
   try {
-    return await CouponService.getCoupons();
+    return await CouponService.getCoupons(couponData);
 
   } catch (error) {
     return thunkAPI.rejectWithValue(error)

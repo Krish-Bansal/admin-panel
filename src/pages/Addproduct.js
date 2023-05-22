@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useRef, useState } from "react";
 import CustomInput from "../components/CustomInput";
 import ReactQuill from "react-quill";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -24,17 +24,31 @@ let schema = yup.object().shape({
     .min(1, "Pick at least one color").max(1, "You can only select one color")
     .required("Color is Required"),
   quantity: yup.number().required("Quantity is Required"),
-  size: yup.array().min(1, "Pick at least one size").required("Size is required")
+  // size: yup.array().min(1, "Pick at least one size").required("Size is required")
+  images: yup.array()
+    .min(1, 'At least one image is required')
+    .max(10, 'Maximum 10 images allowed'),
 });
 
 const Addproduct = () => {
+  const getTokenFromLocalStorage = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
+
+  const config3 = {
+    headers: {
+      Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+        }`,
+      Accept: "application/json",
+    },
+  };
   const dispatch = useDispatch();
   const location = useLocation();
   const getProductId = location.pathname.split("/")[3];
   const navigate = useNavigate();
   const [color, setColor] = useState([]);
   const [images, setImages] = useState([]);
-  // const [selectedSizes, setSelectedSizes] = useState([]);
+
   useEffect(() => {
     dispatch(getCategories());
     dispatch(getColors());
@@ -44,22 +58,23 @@ const Addproduct = () => {
   const colorState = useSelector((state) => state.color.colors);
   const imgState = useSelector((state) => state.upload.images);
   const newProduct = useSelector((state) => state.product);
-  const { isSuccess, isError, isLoading, createdProduct, singleproduct, updatedProduct } = newProduct;
-  // useEffect(() => {
+  const { isSuccess, isError, isLoading, createdProduct, productTitle, productDescription, productPrice, productCategory, productSize, productTags, productColorTitle, productQuantity, productImage, updatedProduct } = newProduct;
 
-  //   }
-  //   else {
-  //     // dispatch(resetState())
-  //   }
-  // }, [getProductId])
+  useEffect(() => {
+    if (getProductId !== undefined) {
+      dispatch(getAProduct(getProductId));
+    } else {
+      dispatch(resetState());
+    }
+  }, [getProductId]);
   useEffect(() => {
     if (isSuccess && createdProduct) {
       toast.success("Product Added Successfully!")
     }
-    // if (isSuccess && updatedProduct) {
-    //   toast.success("Category Updated Successfully!");
-    //   navigate('/admin/list-product')
-    // }
+    if (isSuccess && updatedProduct) {
+      toast.success("Category Updated Successfully!");
+      navigate('/admin/product-list')
+    }
     if (isError) {
       toast.error("Something Went Wrong!")
     }
@@ -67,15 +82,23 @@ const Addproduct = () => {
   const deleteImage = (id) => {
     dispatch(delImg(id));
   }
-  const coloropt = [];
-  colorState?.forEach((i) => {
-    coloropt.push({
-      label: <ul className="colors ps-0">
-        <div className='bg-black '><li style={{ backgroundColor: i.title, borderColor: 'white' }}></li></div>
-      </ul>,
-      value: i._id,
-    });
-  });
+  const onDrop = (acceptedFiles) => {
+    const config = config3; // Assuming config3 is accessible in the current scope
+    dispatch(uploadImg({ acceptedFiles, config }));
+  };
+  const coloropt = colorState?.map((i) => ({
+    label: (
+      <ul className="colors ps-0">
+        <div className='bg-black'>
+          <li style={{ backgroundColor: i.title, borderColor: 'white' }}></li>
+        </div>
+      </ul>
+    ),
+    value: i._id, // Change this line to use the color title instead of _id
+  }));
+
+
+
   const img = [];
   imgState?.forEach((i) => {
     img.push({
@@ -84,37 +107,56 @@ const Addproduct = () => {
     });
   });
 
-  useEffect(() => {
-    formik.values.color = color ? color : " ";
-    formik.values.images = img;
-  }, [color, img]);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      title: singleproduct || "",
-      description: "",
-      price: "",
-      category: "",
-      tags: "",
-      color: "",
-      quantity: "",
-      images: "",
-      size: [],
+      title: productTitle || "",
+      description: productDescription || "",
+      price: productPrice || "",
+      category: productCategory || "",
+      tags: productTags || "",
+      color: [],
+      quantity: productQuantity || "",
+      images: productImage || [],
+      size: productSize || [],
     },
+
     validationSchema: schema,
     onSubmit: (values) => {
-      // alert(JSON.stringify(values))
-      dispatch(createProducts(values));
-      console.log(values)
-      formik.resetForm()
-      setColor(null);
-      setTimeout(() => { dispatch(resetState()) }, 3000)
+      if (getProductId !== undefined) {
+
+        const data = { id: getProductId, productData: values }
+        dispatch(updateAProduct(data))
+        dispatch(resetState())
+      }
+      else {
+        dispatch(createProducts(values));
+        setColor(null);
+        formik.resetForm()
+        setTimeout(() => { dispatch(resetState()) }, 3000)
+      }
     },
   });
-  const handleColors = (e) => {
-    setColor(e);
-    console.log(color);
+  useEffect(() => {
+    if (productColorTitle) {
+      handleColors(productColorTitle); // Ensure the value is always an array
+    }
+  }, [productColorTitle])
+  useEffect(() => {
+    if (productImage) {
+      const imageUrls = productImage.map((image) => ({
+        url: image.url,
+        public_id: image.public_id,
+      }));
+      setImgState(imageUrls);
+    }
+    // ... other field assignments
+  }, [productImage]);
+
+  const handleColors = (selectedColors) => {
+    formik.setFieldValue('color', Array.isArray(selectedColors) ? selectedColors : [selectedColors]);
   };
+
   const handleSizes = (selectedSizes) => {
     formik.setFieldValue("size", selectedSizes)
   };
@@ -221,7 +263,6 @@ const Addproduct = () => {
                   { label: '34', value: '34' },
                   { label: '36', value: '36' },
                   { label: '38', value: '38' },
-
                 ]}
               />
               <div className="error">
@@ -238,7 +279,7 @@ const Addproduct = () => {
             id=""
           >
             <option value="" disabled>
-              Select Category
+              Select Tag
             </option>
             <option value="featured">Featured</option>
             <option value="popular">Popular</option>
@@ -253,35 +294,13 @@ const Addproduct = () => {
             allowClear
             className="w-100"
             placeholder="Select colors"
-            defaultValue={color}
-            onChange={(i) => handleColors(i)}
+            value={formik.values.color}
+            onChange={handleColors}
             options={coloropt}
           />
-          <div className="error">
-            {formik.touched.color && formik.errors.color}
-          </div>
-          {/* <Select
-            mode="multiple"
-            allowClear
-            className="w-100"
-            placeholder="Select sizes"
-            value={formik.values.size}
-            onChange={handleSizes}
-            options={[
-              { label: 'S', value: 'S' },
-              { label: 'M', value: 'M' },
-              { label: 'L', value: 'L' },
-              { label: 'XL', value: 'XL' },
-              { label: 'XXL', value: 'XXL' },
-              { label: '30', value: '30' },
-              { label: '32', value: '32' },
-              { label: '34', value: '34' },
-              { label: '36', value: '36' },
-            ]}
-          />
-          <div className="error">
-            {formik.touched.size && formik.errors.size}
-          </div> */}
+          {formik.touched.color && formik.errors.color && (
+            <div className="error">{formik.errors.color}</div>
+          )}
           <CustomInput
             type="number"
             label="Enter Product Quantity"
@@ -294,39 +313,39 @@ const Addproduct = () => {
             {formik.touched.quantity && formik.errors.quantity}
           </div>
           <div className="bg-white border-1 p-5 text-center">
-            <Dropzone
-              onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
-            >
+            <Dropzone onDrop={onDrop}>
               {({ getRootProps, getInputProps }) => (
                 <section>
                   <div {...getRootProps()}>
                     <input {...getInputProps()} />
-                    <p>
-                      Drag 'n' drop some files here, or click to select files
-                    </p>
+                    <p>Drag 'n' drop some files here, or click to select files</p>
                   </div>
                 </section>
               )}
             </Dropzone>
           </div>
+
           <div>
-            <p>Note:The First uploaded image will be the main image of product card and singleproduct,second image will be the hover image of product card and the rest of the images will be the images of single product.Maximum 10 images of a single product is allowed.</p>
+            <p>
+              Note: The first uploaded image will be the main image of the product card and single product, the second image will be the hover image of the product card, and the rest of the images will be the images of the single product. Maximum 10 images of a single product are allowed.
+            </p>
           </div>
           <div className="showimages d-flex flex-wrap gap-3">
-            {imgState?.map((i, j) => {
-              return (
-                <div className="position-relative" key={j}>
-                  <button
-                    type="button"
-                    onClick={() => deleteImage(i.public_id)}
-                    className="btn-close position-absolute"
-                    style={{ top: "10px", right: "10px" }}
-                  ></button>
-                  <img src={i.url} alt="" width={200} height={200} />
-                </div>
-              );
-            })}
+            {imgState && imgState.map((image, index) => (
+              <div className="position-relative" key={index}>
+                <button
+                  type="button"
+                  onClick={() => deleteImage(image.public_id)}
+                  className="btn-close position-absolute"
+                  style={{ top: "10px", right: "10px" }}
+                ></button>
+                <img src={image.url} alt="" width={200} height={200} />
+              </div>
+            ))}
           </div>
+          {formik.touched.images && formik.errors.images && (
+            <div className="error">{formik.errors.images}</div>
+          )}
           <button
             className="btn btn-success border-0 rounded-3 my-5"
             type="submit"

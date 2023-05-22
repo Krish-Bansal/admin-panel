@@ -20,7 +20,7 @@ const getOrder = async (id) => {
 };
 
 const updateOrder = async (data) => {
-  const response = await axios.put(`${base_url}user/updateorder/${data.id}`, { status: data.status }, config);
+  const response = await axios.put(`${base_url}user/updateorder/${data.id}`, { status: data.status }, data.config);
   return response.data
 };
 const getMonthlyOrders = async (data) => {

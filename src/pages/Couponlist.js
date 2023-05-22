@@ -43,6 +43,17 @@ const columns = [
 
 
 const Couponlist = () => {
+  const getTokenFromLocalStorage = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
+
+  const config3 = {
+    headers: {
+      Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+        }`,
+      Accept: "application/json",
+    },
+  };
   const [open, setOpen] = useState(false);
   const [couponId, setcouponId] = useState("");
   const showModal = (e) => {
@@ -55,7 +66,7 @@ const Couponlist = () => {
   }
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getCoupons())
+    dispatch(getCoupons(config3))
   }, [])
   const couponState = useSelector((state) => state.coupon.coupons)
   const data1 = [];
@@ -82,7 +93,7 @@ const Couponlist = () => {
     dispatch(deleteACoupon(e));
     setOpen(false);
     setTimeout(() => {
-      dispatch(getCoupons())
+      dispatch(getCoupons(config3))
     }, 500)
   }
   return (

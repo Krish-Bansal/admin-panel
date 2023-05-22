@@ -38,6 +38,17 @@ const columns = [
 
 
 const Enquiries = () => {
+  const getTokenFromLocalStorage = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
+
+  const config3 = {
+    headers: {
+      Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+        }`,
+      Accept: "application/json",
+    },
+  };
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [enqId, setenqId] = useState("");
@@ -52,7 +63,7 @@ const Enquiries = () => {
 
   useEffect(() => {
     dispatch(resetState())
-    dispatch(getEnquiries())
+    dispatch(getEnquiries(config3))
   }, [])
   const enqState = useSelector((state) => state.enquiry.enquiries)
   const data1 = [];
@@ -101,7 +112,7 @@ const Enquiries = () => {
     dispatch(deleteAEnquiry(e))
     setOpen(false)
     setTimeout(() => {
-      dispatch(getEnquiries())
+      dispatch(getEnquiries(config3))
     }, 500)
   }
   return (

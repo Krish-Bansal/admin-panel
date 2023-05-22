@@ -2,8 +2,8 @@ import axios from 'axios';
 import { base_url } from '../../utils/base_url';
 import { config } from '../../utils/axoisconfig';
 
-const getCoupons = async () => {
-  const response = await axios.get(`${base_url}coupon/`, config);
+const getCoupons = async (couponData) => {
+  const response = await axios.get(`${base_url}coupon/`, couponData);
   return response.data
 };
 const createCoupons = async (color) => {

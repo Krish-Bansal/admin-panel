@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import enquiryService from "./enquiryService"
 
-export const getEnquiries = createAsyncThunk('enquiry/', async (thunkAPI) => {
+export const getEnquiries = createAsyncThunk('enquiry/', async (enquiryData, thunkAPI) => {
   try {
-    return await enquiryService.getEnquiries()
+    return await enquiryService.getEnquiries(enquiryData)
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
   }

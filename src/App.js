@@ -57,6 +57,9 @@ const App = () => {
         <Route path='category/:id' element={<AddCategory />} />
 
         <Route path='product' element={<Addproduct />} />
+        <Route path='product/:id' element={<Addproduct />} />
+
+
 
 
 

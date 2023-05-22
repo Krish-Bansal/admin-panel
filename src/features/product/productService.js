@@ -20,7 +20,6 @@ const deleteProduct = async (id) => {
   return response.data;
 }
 const updateProduct = async (product) => {
-  console.log(product);
   const response = await axios.put(`${base_url}product/${product.id}`,
     { title: product.productData.title },
     config

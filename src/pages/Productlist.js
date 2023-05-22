@@ -48,12 +48,12 @@ const Productlist = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [productId, setproductId] = useState("");
-
-  const showModal = (e) => {
+  const [productTitle, setProductTitle] = useState("")
+  const showModal = (id, title) => {
     setOpen(true);
-    setproductId(e);
+    setproductId(id);
+    setProductTitle(title)
   };
-
   const hideModal = () => {
     setOpen(false);
   }
@@ -83,7 +83,7 @@ const Productlist = () => {
           <Link to={`/admin/product/${productState[i]._id}`} className='fs-5 text-danger' style={{ "textDecoration": "none" }}>
             <BiEdit />
           </Link>
-          <button to="/" className='ms-3 fs-5 text-danger bg-transparent border-0' onClick={() => showModal(productState[i]._id)}>
+          <button to="/" className='ms-3 fs-5 text-danger bg-transparent border-0' onClick={() => showModal(productState[i]._id, productState[i].title)}>
             <AiFillDelete />
           </button>
         </>
@@ -108,7 +108,7 @@ const Productlist = () => {
           performAction={() => {
             deletedProduct(productId);
           }}
-          title="Are you sure you want to delete this Product?" />
+          title={`Are you sure you want to delete this Product (${productTitle})?`} />
       </div>
     </div>
   )

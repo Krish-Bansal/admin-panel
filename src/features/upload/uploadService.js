@@ -3,8 +3,8 @@ import { config } from "../../utils/axoisconfig";
 import { base_url } from "../../utils/base_url";
 
 
-const uploadImg = async (data) => {
-  const response = await axios.post(`${base_url}upload`, data, config)
+const uploadImg = async (data, config2) => {
+  const response = await axios.post(`${base_url}upload`, data, config2)
   return response.data;
 };
 const deleteImg = async (id) => {

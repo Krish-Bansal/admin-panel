@@ -26,6 +26,7 @@ export const deleteAproduct = createAsyncThunk("product/delete-product", async (
 })
 export const updateAProduct = createAsyncThunk("product/update-product",
   async (product, thunkAPI) => {
+    console.log(product)
     try {
       return await productService.updateProduct(product);
     } catch (error) {
@@ -127,7 +128,15 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.productdata = action.payload;
+        state.productTitle = action.payload.title;
+        state.productDescription = action.payload.description;
+        state.productPrice = action.payload.price;
+        state.productCategory = action.payload.category;
+        state.productSize = action.payload.size;
+        state.productTags = action.payload.tags;
+        state.productColorTitle = action.payload.color[0]._id;
+        state.productQuantity = action.payload.quantity;
+        state.productImage = action.payload.images.url;
       })
       .addCase(getAProduct.rejected, (state, action) => {
         state.isLoading = false;

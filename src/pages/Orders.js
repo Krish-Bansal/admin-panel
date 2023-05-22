@@ -101,9 +101,7 @@ const Orders = () => {
     });
   }
   const updateOrderStatus = (a, b) => {
-
-    dispatch(updateAOrder({ id: a, status: b }))
-
+    dispatch(updateAOrder({ id: a, status: b, config: config3 }))
   }
 
   return (
