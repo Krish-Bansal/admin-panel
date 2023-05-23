@@ -24,6 +24,7 @@ const AddCat = () => {
     else {
       dispatch(resetState())
     }
+    //esling
   }, [getPCatId])
   useEffect(() => {
     if (isSuccess && createdCategory) {
