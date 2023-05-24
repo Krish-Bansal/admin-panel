@@ -13,6 +13,7 @@ const ViewEnq = () => {
   const { enqName, enqMobile, enqEmail, enqComment, enqStatus } = enqState;
   useEffect(() => {
     dispatch(getAEnquiry(getEnqId))
+    //eslint-disable-next-line
   }, [getEnqId])
   const goBack = () => {
     navigate(-1)

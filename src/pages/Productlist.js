@@ -60,6 +60,7 @@ const Productlist = () => {
   useEffect(() => {
     dispatch(resetState());
     dispatch(getProducts());
+    //eslint-disable-next-line
   }, []);
   const productState = useSelector((state) => state.product.products)
   const data1 = [];

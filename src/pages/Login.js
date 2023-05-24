@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, } from 'react-bootstrap';
 import CustomInput from '../components/CustomInput';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Logo1 from "../assests/defy_logo-removebg-preview.png";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useFormik } from "formik"
@@ -62,6 +62,7 @@ const Login = () => {
     else {
       navigate("");
     }
+    //eslint-disable-next-line
   }, [user, isError, isSuccess, isLoading])
   const [showPassword, setShowPassword] = useState(false);
 
@@ -74,7 +75,7 @@ const Login = () => {
       <Container fluid>
         <Row>
           <Col md={6} className="p-0">
-            <img src={images[currentImageIndex]} alt="DEFY Picture" className='opacity-80' style={{ width: '100%', height: '100vh', objectFit: 'cover' }} />
+            <img src={images[currentImageIndex]} alt="DEFY Product" className='opacity-80' style={{ width: '100%', height: '100vh', objectFit: 'cover' }} />
 
           </Col>
           <Col>
@@ -88,7 +89,7 @@ const Login = () => {
                   onChng={formik.handleChange("email")} />
                 <div className="error">
                   {formik.touched.email && formik.errors.email ? (<div>{formik.errors.email}</div>) : null}
-                  {message.message == "Rejected" ? "You are not an Admin" : ""}
+                  {message.message === "Rejected" ? "You are not an Admin" : ""}
                 </div>
                 <CustomInput type={showPassword ? "text" : "password"} name="password" label="Password" id="password" val={formik.values.password}
                   onChng={formik.handleChange("password")}

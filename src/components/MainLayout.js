@@ -9,15 +9,14 @@ import { IoIosPeople } from 'react-icons/io'
 import { Outlet } from 'react-router-dom';
 import { RiCoupon3Line } from "react-icons/ri";
 import { MdOutlineCampaign } from 'react-icons/md'
-import { AiOutlineShoppingCart, AiOutlineOrderedList, AiOutlineBgColors, AiOUtline } from 'react-icons/ai'
-import { ToastContainer, toast } from "react-toastify";
+import { AiOutlineShoppingCart, AiOutlineOrderedList, AiOutlineBgColors } from 'react-icons/ai'
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoListUnordered } from 'react-icons/go'
 import { HiClipboardList } from 'react-icons/hi'
 import { Layout, Menu, theme } from 'antd';
 import { GiClothes } from 'react-icons/gi'
 import React, { useState } from 'react';
-import { IoIosNotifications } from 'react-icons/io';
 import { BsPatchQuestion, BsCardList } from 'react-icons/bs'
 import { BiCategoryAlt, BiColor, BiLogOut } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';

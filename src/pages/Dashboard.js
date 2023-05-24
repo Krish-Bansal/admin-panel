@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { BsArrowDownRight, BsArrowUpRight } from 'react-icons/bs'
 import { Column } from '@ant-design/plots'
 import { Table } from 'antd'
 import { useDispatch, useSelector } from "react-redux"
@@ -60,6 +59,7 @@ const Dashboard = () => {
     dispatch(getOrders(config3))
     dispatch(getMonthlyData(config3))
     dispatch(getYearlyData(config3))
+    //eslint-disable-next-line
   }, [])
   useEffect(() => {
     let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -87,6 +87,7 @@ const Dashboard = () => {
       });
     }
     setOrderData(data1)
+    //eslint-disable-next-line
   }, [monthlyDataState, yearlyDataState])
   const config = {
     data: dataMonthly,

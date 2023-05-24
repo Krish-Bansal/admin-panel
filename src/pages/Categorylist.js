@@ -40,6 +40,7 @@ const Categorylist = () => {
   useEffect(() => {
     dispatch(resetState())
     dispatch(getCategories());
+    //eslint-disable-next-line
   }, []);
   const pCatStat = useSelector((state) => state.pCategory.pCategories)
   const data1 = [];

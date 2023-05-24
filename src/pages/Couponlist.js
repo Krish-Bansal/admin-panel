@@ -6,9 +6,6 @@ import { Link } from 'react-router-dom';
 import { AiFillDelete } from 'react-icons/ai';
 import { BiEdit } from 'react-icons/bi';
 import CustomModal from '../components/CustomModal';
-import { deleteAColor } from '../features/color/colorSlice';
-
-
 const columns = [
   {
     title: 'SNo',
@@ -67,6 +64,7 @@ const Couponlist = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCoupons(config3))
+    //eslint-disable-next-line
   }, [])
   const couponState = useSelector((state) => state.coupon.coupons)
   const data1 = [];

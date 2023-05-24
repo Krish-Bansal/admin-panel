@@ -1,4 +1,4 @@
-import { React, useEffect, useRef, useState } from "react";
+import { React, useEffect } from "react";
 import CustomInput from "../components/CustomInput";
 import ReactQuill from "react-quill";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -23,11 +23,10 @@ let schema = yup.object().shape({
     .array()
     .min(1, "Pick at least one color").max(1, "You can only select one color")
     .required("Color is Required"),
-  quantity: yup.number().required("Quantity is Required"),
-  // size: yup.array().min(1, "Pick at least one size").required("Size is required")
-  images: yup.array()
-    .min(1, 'At least one image is required')
-    .max(10, 'Maximum 10 images allowed'),
+  // images: yup
+  //   .array()
+  //   .min(1, 'At least one image is required')
+  //   .max(10, 'Maximum 10 images allowed'),
 });
 
 const Addproduct = () => {
@@ -46,12 +45,13 @@ const Addproduct = () => {
   const location = useLocation();
   const getProductId = location.pathname.split("/")[3];
   const navigate = useNavigate();
-  const [color, setColor] = useState([]);
-  const [images, setImages] = useState([]);
+  // const [color, setColor] = useState([]);
+  // const [images, setImages] = useState([]);
 
   useEffect(() => {
     dispatch(getCategories());
     dispatch(getColors());
+    //eslint-disable-next-line
   }, []);
 
   const catState = useSelector((state) => state.pCategory.pCategories);
@@ -65,6 +65,7 @@ const Addproduct = () => {
     } else {
       dispatch(resetState());
     }
+    //eslint-disable-next-line
   }, [getProductId]);
   useEffect(() => {
     if (isSuccess && createdProduct) {
@@ -77,11 +78,13 @@ const Addproduct = () => {
     if (isError) {
       toast.error("Something Went Wrong!")
     }
+    //eslint-disable-next-line
   }, [isSuccess, isError, isLoading]);
   const deleteImage = (id) => {
     dispatch(delImg(id));
   }
   const onDrop = (acceptedFiles) => {
+    // setImages(acceptedFiles);
     const config = config3; // Assuming config3 is accessible in the current scope
     dispatch(uploadImg({ acceptedFiles, config }));
   };
@@ -116,7 +119,7 @@ const Addproduct = () => {
       tags: productTags || "",
       color: [],
       quantity: productQuantity || "",
-      images: productImage || [],
+      images: [],
       size: productSize || [],
     },
 
@@ -128,8 +131,9 @@ const Addproduct = () => {
         dispatch(resetState())
       }
       else {
+        values.images = img
         dispatch(createProducts(values));
-        setColor(null);
+        // setColor(null);
         formik.resetForm()
         setTimeout(() => { dispatch(resetState()) }, 3000)
       }
@@ -139,6 +143,7 @@ const Addproduct = () => {
     if (productColorTitle) {
       handleColors(productColorTitle); // Ensure the value is always an array
     }
+    //eslint-disable-next-line
   }, [productColorTitle])
 
 
@@ -347,9 +352,10 @@ const Addproduct = () => {
             ))}
           </div>
 
-          {formik.touched.images && formik.errors.images && (
+          {/* {formik.errors.images && (
             <div className="error">{formik.errors.images}</div>
-          )}
+          )} */}
+
           <button
             className="btn btn-success border-0 rounded-3 my-5"
             type="submit"

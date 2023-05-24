@@ -59,6 +59,7 @@ const Customers = () => {
   useEffect(() => {
     dispatch(getUsers())
     dispatch(resetState())
+    //eslint-disable-next-line
   }, [])
   const customerstate = useSelector((state) => state.customer.customers);
   const data1 = [];

@@ -41,6 +41,7 @@ const Colorlist = () => {
   useEffect(() => {
     dispatch(getColors())
     dispatch(resetState())
+    //eslint-disable-next-line
   }, [])
   const colorState = useSelector((state) => state.color.colors)
   const data1 = [];

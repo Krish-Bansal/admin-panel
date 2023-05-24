@@ -64,6 +64,7 @@ const Enquiries = () => {
   useEffect(() => {
     dispatch(resetState())
     dispatch(getEnquiries(config3))
+    //eslint-disable-next-line
   }, [])
   const enqState = useSelector((state) => state.enquiry.enquiries)
   const data1 = [];

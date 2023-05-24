@@ -24,6 +24,7 @@ const Addcolor = () => {
     } else {
       dispatch(resetState())
     }
+    //eslint-disable-next-line
   }, [getColorId])
   useEffect(() => {
     if (isSuccess && createdColor) {
@@ -36,6 +37,7 @@ const Addcolor = () => {
     if (isError) {
       toast.error("Something Went Wrong!")
     }
+    //eslint-disable-next-line
   }, [isSuccess, isError, isLoading]);
   const formik = useFormik({
     enableReinitialize: true,

@@ -24,7 +24,7 @@ const AddCat = () => {
     else {
       dispatch(resetState())
     }
-    //esling
+    //eslint-disable-next-line
   }, [getPCatId])
   useEffect(() => {
     if (isSuccess && createdCategory) {
@@ -37,6 +37,7 @@ const AddCat = () => {
     if (isError) {
       toast.error("Something Went Wrong!")
     }
+    //eslint-disable-next-line
   }, [isSuccess, isError, isLoading]);
   const formik = useFormik({
     enableReinitialize: true,

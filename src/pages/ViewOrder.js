@@ -2,9 +2,7 @@ import React, { useEffect } from 'react'
 import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrder, } from '../features/auth/authSlice';
-import { Link, useLocation } from 'react-router-dom';
-import { AiFillDelete } from 'react-icons/ai';
-import { BiEdit } from 'react-icons/bi';
+import { useLocation } from 'react-router-dom';
 
 const columns = [
   {
@@ -42,6 +40,7 @@ const ViewOrder = () => {
 
   useEffect(() => {
     dispatch(getOrder(orderId))
+    //eslint-disable-next-line
   }, [])
 
   const orderState = useSelector((state) => state?.auth?.singleorder?.orders)

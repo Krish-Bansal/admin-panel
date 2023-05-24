@@ -39,7 +39,7 @@ const columns = [
         <p>{text}</p>
         <p>{record.address}</p>
         <p>{record.other}</p>
-        <p>{record.mobile}</p>
+        <p>{record.shipmobile}</p>
       </div>
     )
   },
@@ -63,6 +63,7 @@ const Orders = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getOrders(config3))
+    //eslint-disable-next-line
   }, [])
   const orderState = useSelector((state) => state?.auth?.orders?.orders)
 
@@ -79,12 +80,12 @@ const Orders = () => {
       amount: orderState[i]?.totalPriceAfterDiscount,
       date: new Date(orderState[i].createdAt).toLocaleString(),
       shipping:
-        `${orderState[i]?.shippingInfo?.firstname}` + ` ` + `${orderState[i]?.shippingInfo?.lastname}`,
+        `${orderState[i]?.shippingInfo?.firstname} ${orderState[i]?.shippingInfo?.lastname}`,
       address:
-        `${orderState[i]?.shippingInfo?.address}` + `,` + `${orderState[i]?.shippingInfo?.city}` + `,` + `${orderState[i]?.shippingInfo?.state}`,
+        `${orderState[i]?.shippingInfo?.address}, ${orderState[i]?.shippingInfo?.city}, ${orderState[i]?.shippingInfo?.state}`,
       other:
-        `${orderState[i]?.shippingInfo?.other}` + `,` + `${orderState[i]?.shippingInfo?.pincode}`,
-      mobile:
+        `${orderState[i]?.shippingInfo?.other}, ${orderState[i]?.shippingInfo?.pincode}`,
+      shipmobile:
         `${orderState[i]?.shippingInfo?.mobile}`,
       action: (
         <>

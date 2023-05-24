@@ -25,6 +25,7 @@ const AddCoupon = () => {
     } else {
       dispatch(resetState)
     }
+    //eslint-disable-next-line
   }, [getCouponId])
   useEffect(() => {
     if (isSuccess && createdCoupon) {
@@ -38,6 +39,7 @@ const AddCoupon = () => {
     if (isError) {
       toast.error("Something Went Wrong!")
     }
+    //eslint-disable-next-line
   }, [isSuccess, isError, isLoading]);
   const formik = useFormik({
     enableReinitialize: true,
